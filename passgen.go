@@ -19,6 +19,8 @@ package main
 import (
 	"crypto/rand"
 	"fmt"
+	"github.com/pborman/getopt/v2"
+	"os"
 )
 
 var char_table = []string{
@@ -29,6 +31,15 @@ var char_table = []string{
 }
 
 func main() {
+	optHelp := getopt.BoolLong("help", 'h', "Help")
+
+	getopt.Parse()
+
+	if *optHelp {
+		getopt.Usage()
+		os.Exit(0)
+	}
+
 	b := make([]byte, 10)
 	_, err := rand.Read(b)
 	if err != nil {
