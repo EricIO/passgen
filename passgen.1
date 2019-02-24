@@ -1,0 +1,23 @@
+.TH passgen 1 "24 February 2019" "version 1.0.0"
+.SH NAME
+passgen \- A password generator
+.SH EXAMPLE
+Creating 10 passwords of length 20:
+
+    passgen -l 20 -n 10
+.SH SYNOPSIS
+Passgen is a simple password generator that I created for myself so I wouldn't have to remember bash commands.
+.SH OPTIONS
+.BR "-l, --length"
+        Control the length of the generated passwords. Defualt value is
+.B 10.
+
+.BR "-n, --number"
+        The number of passwords generated. Default value is
+.B 1.
+
+.BR "-h, --help"
+        Prints the help message
+
+.SH AUTHOR
+Eric Skoglund (eric@pagefault.se)

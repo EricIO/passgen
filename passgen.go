@@ -37,7 +37,7 @@ func makePassword(length int) string {
 		panic(err)
 	}
 
-	char_table_len := len(char_table) - 1
+	char_table_len := len(char_table)
 	pass := ""
 	for _, idx := range b {
 		pass += char_table[int(idx)%char_table_len]
