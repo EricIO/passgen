@@ -30,9 +30,26 @@ var char_table = []string{
 	"!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "<", ">", "?", "=", "[", "]", "\\", "^", "_", "{", "}", "|",
 }
 
-func main() {
-	optHelp := getopt.BoolLong("help", 'h', "Help")
+func makePassword(length int) string {
+	b := make([]byte, length)
+	_, err := rand.Read(b)
+	if err != nil {
+		panic(err)
+	}
 
+	char_table_len := len(char_table) - 1
+	pass := ""
+	for _, idx := range b {
+		pass += char_table[int(idx)%char_table_len]
+	}
+
+	return pass
+}
+
+func main() {
+	optHelp := getopt.BoolLong("help", 'h', "Print this help message")
+	optLength := getopt.IntLong("length", 'l', 10, "Fixed length of the passwords generated")
+	optNumber := getopt.IntLong("number", 'n', 1, "The number of passwords to be generated")
 	getopt.Parse()
 
 	if *optHelp {
@@ -40,17 +57,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	b := make([]byte, 10)
-	_, err := rand.Read(b)
-	if err != nil {
-		panic(err)
+	for i := 0; i < *optNumber; i++ {
+		pass := makePassword(*optLength)
+		fmt.Println(pass)
 	}
-
-	length := len(char_table) - 1
-	pass := ""
-	for _, idx := range b {
-		pass += char_table[int(idx)%length]
-	}
-
-	fmt.Println(pass)
 }
