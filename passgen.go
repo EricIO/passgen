@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"github.com/pborman/getopt/v2"
 	"os"
+	"strings"
 )
 
 var char_table = []string{
@@ -30,17 +31,25 @@ var char_table = []string{
 	"!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "<", ">", "?", "=", "[", "]", "\\", "^", "_", "{", "}", "|",
 }
 
-func makePassword(length int) string {
-	b := make([]byte, length)
-	_, err := rand.Read(b)
+func makePassword(length int, exclude string) string {
+	// We make the array bigger so that we have enough
+	// bytes if we have to exclude a bunch of them.
+	bytes := make([]byte, length*2)
+	_, err := rand.Read(bytes)
 	if err != nil {
 		panic(err)
 	}
 
 	char_table_len := len(char_table)
 	pass := ""
-	for _, idx := range b {
-		pass += char_table[int(idx)%char_table_len]
+	for _, idx := range bytes {
+		next_char := char_table[int(idx)%char_table_len]
+		if strings.Index(exclude, next_char) == -1 {
+			pass += next_char
+			if len(pass) == length {
+				return pass
+			}
+		}
 	}
 
 	return pass
@@ -50,6 +59,7 @@ func main() {
 	optHelp := getopt.BoolLong("help", 'h', "Print this help message")
 	optLength := getopt.IntLong("length", 'l', 10, "Fixed length of the passwords generated")
 	optNumber := getopt.IntLong("number", 'n', 1, "The number of passwords to be generated")
+	optExclude := getopt.StringLong("exclude", 'e', "", "Characters to exclude from the password")
 	getopt.Parse()
 
 	if *optHelp {
@@ -58,7 +68,7 @@ func main() {
 	}
 
 	for i := 0; i < *optNumber; i++ {
-		pass := makePassword(*optLength)
+		pass := makePassword(*optLength, *optExclude)
 		fmt.Println(pass)
 	}
 }
