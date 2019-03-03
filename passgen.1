@@ -5,6 +5,11 @@ passgen \- A password generator
 Creating 10 passwords of length 20:
 
     passgen -l 20 -n 10
+
+Exclude characters from generation:
+
+    passgen --exclude "\\#,.:"
+
 .SH SYNOPSIS
 Passgen is a simple password generator that I created for myself so I wouldn't have to remember bash commands.
 .SH OPTIONS
@@ -15,6 +20,9 @@ Passgen is a simple password generator that I created for myself so I wouldn't h
 .BR "-n, --number"
         The number of passwords generated. Default value is
 .B 1.
+
+.BR "-e, --exclude"
+        Exclude certain characters from the generation
 
 .BR "-h, --help"
         Prints the help message
